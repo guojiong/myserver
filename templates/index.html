@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {#    <script src="/static/jQuery/jquery-3.6.0.min.js"></script>#}
+    <script src="http://cdn.bootcss.com/jquery/1.12.2/jquery.js"></script>
+</head>
+<script>
+    function create_db_name() {
+        let dbName = $('#dbName').val();
+        if (dbName == '' || dbName == null) {
+            return null
+        }
+        let data = {
+            dbName: dbName,
+        };
+        return data;
+    }
+
+    function create_db() {
+        if (create_db_name() == null) {
+            alert('dbName为空')
+            return
+        }
+        $.ajax({
+            url: "/db/create_db",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(create_db_name()),
+            success: function (data) {
+                alert(data);
+            },
+        });
+    }
+
+    function drop_db() {
+        if (create_db_name() == null) {
+            alert('dbName为空')
+            return
+        }
+        $.ajax({
+            url: "/db/drop_db",
+            type: "delete",
+            data: create_db_name(),
+            success: function (data) {
+                alert(data);
+            },
+        });
+    }
+
+    function up_load() {
+        let file = $("#s_file")[0].files[0];
+        if (file == null) {
+            alert('请选择上传文件！！')
+            return
+        }
+        let path = $("#f_path").val();
+        let formData = new FormData();
+        formData.append("file", file);
+        path = null || path == '' ? '.' : path;
+        formData.append("path", path);
+
+        $.ajax({
+            url: '/upload',
+            type: "post",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data)
+                let file = document.getElementById('s_file');
+                file.value = '';
+                alert(data)
+            }
+        });
+    }
+
+</script>
+<body>
+<div align="center">
+    <table align="left">
+        <tr>
+            <td><h2>UpLoad</h2>
+                <input id="f_path" placeholder="file path" type="text"/>
+                <input type="file" id="s_file"/><br><br>
+                <button onclick="javascript: up_load()">提交</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h2>Database</h2>
+                <button onclick="javascript: create_db()">create_database</button>
+                <button onclick="javascript: drop_db()">drop_database</button>
+                <input id="dbName"/>
+                <h2>Table</h2>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
