@@ -106,6 +106,9 @@ def run():
         a_codes.append(c[0])
     print(a_codes)
     stock_sync(a_codes)
+
+
+run()
 # url = 'http://hq.sinajs.cn/list=%s' % ','.join(codes)
 # print(url)
 # requests.get(url=url)

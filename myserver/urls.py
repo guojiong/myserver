@@ -15,12 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from stock.views import index
+from stock import views
 
+print('路由开始加载')
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', index),
-    # path('index/', index, name='index'),
+    path('', views.index),
+    path('upload/', views.upload_file, name='upload'),
+    path('qstock/', views.query_stock, name='qstock'),
+    path('ucstock/', views.update_or_create, name='ucstock'),
     # path('project/', include('project.urls', namespace='project')),
     # path('mclass/', include('mclass.urls', namespace='mclass')),
     # path('store/', include('store.urls', namespace='store')),
