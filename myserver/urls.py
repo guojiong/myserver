@@ -15,7 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from stock.views import index
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
+    path('', index),
+    # path('index/', index, name='index'),
+    # path('project/', include('project.urls', namespace='project')),
+    # path('mclass/', include('mclass.urls', namespace='mclass')),
+    # path('store/', include('store.urls', namespace='store')),
+    # path('reports/', include('reports.urls', namespace='reports')),
+    # path('login/', include('login.urls', namespace='login')),
 ]

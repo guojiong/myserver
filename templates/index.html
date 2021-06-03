@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    {#    <script src="/static/jQuery/jquery-3.6.0.min.js"></script>#}
-    <script src="http://cdn.bootcss.com/jquery/1.12.2/jquery.js"></script>
+    <script src="{% static 'jQuery/jquery-3.6.0.min.js' %}"></script>
+{#    <script src="http://cdn.bootcss.com/jquery/1.12.2/jquery.js"></script>#}
 </head>
 <script>
     function create_db_name() {
