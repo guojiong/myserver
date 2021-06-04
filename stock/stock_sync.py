@@ -1,19 +1,22 @@
+import ctypes
 import datetime
+import inspect
 import time
 from time import sleep
 import numpy
 import pymysql
 import requests
+from stock.models import Stock
 
 dict_names = ('code', 'name', 'startprice', 'yprice', 'nprice', 'hprice', 'lprice', 'bidingprice', 'auctionprice',
-              'tradingvolume', 'tradingprice', 'buy1', 'buy1price1', 'buy2', 'buy2price', 'buy3', 'buy3price',
+              'tradingvolume', 'tradingamount', 'buy1', 'buy1price1', 'buy2', 'buy2price', 'buy3', 'buy3price',
               'buy4', 'buy4price', 'buy5', 'buy5price', 'sale1', 'sale1price', 'sale2', 'sale2price', 'sale3',
               'sale3price', 'sale4', 'sale4price', 'sale5', 'sale5price', 'date', 'time', 'status')
 url = 'http://hq.sinajs.cn/list=%s'
-db_attr = ('localhost', '3306', 'root', '123456')
+# db_attr = ('localhost', '3306', 'root', '123456')
 
 
-# db_attr = ('192.168.10.102', '3306', 'root', '123456')
+db_attr = ('192.168.10.102', '3306', 'root', '123456')
 
 
 def get_connect():
@@ -24,7 +27,7 @@ def stock_sync(codes):
     am_start_time = '09:29:00'
     am_end_time = '11:31:00'
     pm_start_time = '12:59:00'
-    pm_end_time = '16:20:00'
+    pm_end_time = '17:20:00'
     while True:
         hour = datetime.datetime.now().strftime('%H:%M:%S')
         codes_arr = numpy.array_split(codes, 10)
@@ -95,8 +98,10 @@ def db_do_sql(sql_script):
 
 
 def run():
+    print('数据采集', )
     l_sql = 'select CONCAT(t.origin, t.`code`) from stock.stock t'
     l_codes = db_do_sql(sql_script=l_sql)
+    # l_stock = Stock.objects.values('origin', 'code').all()
     # ['603511', '688510', '688315', '688068', '688316', '688097', '688005', '688050', '688613', '688630', '688056',
     #       '688026', '688317', '688559', '688551', '688408', '688233', '688665', '688468', '688388']
     # 多线程
@@ -104,11 +109,32 @@ def run():
     a_codes = list()
     for c in l_codes:
         a_codes.append(c[0])
-    print(a_codes)
+    print('数据采集', a_codes)
+    if len(a_codes) == 0:
+        print('查询代码表为空，线程停止，采集失败')
+        return
     stock_sync(a_codes)
 
 
-run()
-# url = 'http://hq.sinajs.cn/list=%s' % ','.join(codes)
-# print(url)
-# requests.get(url=url)
+def _async_raise(tid, exctype):
+    """raises the exception, performs cleanup if needed"""
+    try:
+        tid = ctypes.c_long(tid)
+        if not inspect.isclass(exctype):
+            exctype = type(exctype)
+        res = ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, ctypes.py_object(exctype))
+        if res == 0:
+            # pass
+            raise ValueError("invalid thread id")
+        elif res != 1:
+            # """if it returns a number greater than one, you're in trouble,
+            # and you should call it again with exc=NULL to revert the effect"""
+            ctypes.pythonapi.PyThreadState_SetAsyncExc(tid, None)
+            raise SystemError("PyThreadState_SetAsyncExc failed")
+    except Exception as err:
+        print(err)
+
+
+def stop_thread(thread):
+    """终止线程"""
+    _async_raise(thread.ident, SystemExit)

@@ -6,4 +6,4 @@ class StockConfig(AppConfig):
     name = 'stock'
 
     def ready(self):
-        autodiscover_modules('stock_sync.py')
+        autodiscover_modules('tests.py')

@@ -24,6 +24,7 @@ urlpatterns = [
     path('upload/', views.upload_file, name='upload'),
     path('qstock/', views.query_stock, name='qstock'),
     path('ucstock/', views.update_or_create, name='ucstock'),
+    path('sync/', views.stock_sync, name='sync'),
     # path('project/', include('project.urls', namespace='project')),
     # path('mclass/', include('mclass.urls', namespace='mclass')),
     # path('store/', include('store.urls', namespace='store')),

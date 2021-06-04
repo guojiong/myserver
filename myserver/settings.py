@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # 'django_crontab',
     'stock',
 ]
 
@@ -89,7 +88,8 @@ DATABASES = {
         'NAME': 'stock',
         'USER': 'root',
         'PASSWORD': '123456',
-        'HOST': 'localhost',
+        # 'HOST': 'localhost',
+        'HOST': '192.168.10.102',
         'POST': 3306,
     }
 }
@@ -136,8 +136,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
     ]
-
-CRONJOBS = [
-    # 每1分钟生成一次首页静态文件
-    ('*/1 * * * *', 'stock.stock_sync.run', '>> ' + os.path.join(BASE_DIR, 'stock_sync.log'))
-]

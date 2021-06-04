@@ -21,75 +21,58 @@ class Stock(models.Model):
 
 class StockPrice(models.Model):
     code = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    name = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    startprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    yprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    nprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    hprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    lprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    bidingprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    auctionprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    tradingvolume = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    tradingprice = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy1 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy1price1 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy2 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy2price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy3 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy3price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy4 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy4price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy5 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    buy5price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale1 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale1price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale2 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale2price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale3 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale3price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale4 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale4price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale5 = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    sale5price = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32),
-    date = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    date,
-    time = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    time,
-    status = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
-    varchar(32))
+    name = models.CharField(max_length=128, verbose_name='股票名称')
+    startprice = models.CharField(max_length=128, verbose_name='今开')
+    yprice = models.CharField(max_length=128, verbose_name='昨收')
+    nprice = models.CharField(max_length=128, verbose_name='当前价格')
+    hprice = models.CharField(max_length=128, verbose_name='最高价')
+    lprice = models.CharField(max_length=128, verbose_name='最低价')
+    bidingprice = models.CharField(max_length=128, verbose_name='竞买价')
+    auctionprice = models.CharField(max_length=128, verbose_name='竞卖价')
+    tradingvolume = models.CharField(max_length=128, verbose_name='成交量')
+    tradingamount = models.CharField(max_length=128, verbose_name='成交金额')
+    buy1 = models.CharField(max_length=128, verbose_name='买一量')
+    buy1price1 = models.CharField(max_length=128, verbose_name='买一')
+    buy2 = models.CharField(max_length=128, verbose_name='买二量')
+    buy2price = models.CharField(max_length=128, verbose_name='买二')
+    buy3 = models.CharField(max_length=128, verbose_name='买三量')
+    buy3price = models.CharField(max_length=128, verbose_name='买三')
+    buy4 = models.CharField(max_length=128, verbose_name='买四量')
+    buy4price = models.CharField(max_length=128, verbose_name='买四')
+    buy5 = models.CharField(max_length=128, verbose_name='买五量')
+    buy5price = models.CharField(max_length=128, verbose_name='买五')
+    sale1 = models.CharField(max_length=128, verbose_name='卖一量')
+    sale1price = models.CharField(max_length=128, verbose_name='卖一')
+    sale2 = models.CharField(max_length=128, verbose_name='卖二量')
+    sale2price = models.CharField(max_length=128, verbose_name='卖二')
+    sale3 = models.CharField(max_length=128, verbose_name='卖三量')
+    sale3price = models.CharField(max_length=128, verbose_name='卖三')
+    sale4 = models.CharField(max_length=128, verbose_name='卖四量')
+    sale4price = models.CharField(max_length=128, verbose_name='卖四')
+    sale5 = models.CharField(max_length=128, verbose_name='卖五量')
+    sale5price = models.CharField(max_length=128, verbose_name='卖五')
+    date = models.CharField(max_length=128, unique=True, verbose_name='日期')
+    time = models.CharField(max_length=128, unique=True, verbose_name='时间')
+    status = models.CharField(max_length=128, verbose_name='状态')
+
     def __str__(self):
-        return
+        return '[%s]' % self.name
 
     class Meta:
-        ordering = ['']
+        ordering = ['time']
+        db_table = 'stockprice'
+        verbose_name = '分时量价'
+        verbose_name_plural = '分时量价'
+
+
+class CollectorStatus(models.Model):
+    ident = models.CharField(max_length=128, unique=True, verbose_name='线程id')
+    status = models.IntegerField(unique=True, verbose_name='状态')
+
+    def __str__(self):
+        return '[%s]' % self.status
+
+    class Meta:
+        db_table = 'CollectorStatus'
+        verbose_name = '采集器状态'
+        verbose_name_plural = '采集器状态'
