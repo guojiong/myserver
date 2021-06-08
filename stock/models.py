@@ -51,8 +51,8 @@ class StockPrice(models.Model):
     sale4price = models.CharField(max_length=128, verbose_name='卖四')
     sale5 = models.CharField(max_length=128, verbose_name='卖五量')
     sale5price = models.CharField(max_length=128, verbose_name='卖五')
-    date = models.CharField(max_length=128, unique=True, verbose_name='日期')
-    time = models.CharField(max_length=128, unique=True, verbose_name='时间')
+    date = models.DateField(max_length=128, unique=True, verbose_name='日期')
+    time = models.TimeField(max_length=128, unique=True, verbose_name='时间')
     status = models.CharField(max_length=128, verbose_name='状态')
 
     def __str__(self):
@@ -76,3 +76,50 @@ class CollectorStatus(models.Model):
         db_table = 'CollectorStatus'
         verbose_name = '采集器状态'
         verbose_name_plural = '采集器状态'
+
+
+class LbHsl(models.Model):
+    code = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
+    date = models.DateField(verbose_name='日期')
+    startprice = models.CharField(max_length=128, verbose_name='开盘价')
+    hprice = models.CharField(max_length=128, verbose_name='最高价')
+    eprice = models.CharField(max_length=128, verbose_name='收盘价')
+    lprice = models.CharField(max_length=128, verbose_name='最低价')
+    volume = models.CharField(max_length=128, verbose_name='成交量')
+    rfprice = models.CharField(max_length=128, verbose_name='涨跌额')
+    applies = models.CharField(max_length=128, verbose_name='涨跌幅')
+    daily5price = models.CharField(max_length=128, verbose_name='5日均价')
+    daily10price = models.CharField(max_length=128, verbose_name='10日均价')
+    daily20price = models.CharField(max_length=128, verbose_name='20日均价')
+    daily5volume = models.CharField(max_length=128, verbose_name='5日均量')
+    daily10volume = models.CharField(max_length=128, verbose_name='10日均量')
+    daily20volume = models.CharField(max_length=128, verbose_name='20日均量')
+    turnoverrate = models.CharField(max_length=128, verbose_name='换手率')
+
+    def __str__(self):
+        return '[%s]' % self.code
+
+    class Meta:
+        ordering = ['date']
+        db_table = 'lbhsl'
+        verbose_name = '量比换手率'
+        verbose_name_plural = '量比换手率'
+
+
+class LbHsl2(models.Model):
+    code = models.CharField(max_length=128, unique=True, verbose_name='股票代码')
+    date = models.DateField(verbose_name='日期')
+    volume = models.CharField(max_length=128, verbose_name='成交量')
+    turnoverrate = models.CharField(max_length=128, verbose_name='换手率')
+    date = models.TimeField(verbose_name='时间')
+
+    def __str__(self):
+        return '[%s]' % self.code
+
+    class Meta:
+        ordering = ['date']
+        db_table = 'lbhsl2'
+        verbose_name = '量比换手率'
+        verbose_name_plural = '量比换手率'
+
+

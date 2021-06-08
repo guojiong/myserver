@@ -88,8 +88,8 @@ DATABASES = {
         'NAME': 'stock',
         'USER': 'root',
         'PASSWORD': '123456',
-        # 'HOST': 'localhost',
-        'HOST': '192.168.10.102',
+        'HOST': 'localhost',
+        # 'HOST': '192.168.10.102',
         'POST': 3306,
     }
 }

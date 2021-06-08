@@ -13,10 +13,10 @@ dict_names = ('code', 'name', 'startprice', 'yprice', 'nprice', 'hprice', 'lpric
               'buy4', 'buy4price', 'buy5', 'buy5price', 'sale1', 'sale1price', 'sale2', 'sale2price', 'sale3',
               'sale3price', 'sale4', 'sale4price', 'sale5', 'sale5price', 'date', 'time', 'status')
 url = 'http://hq.sinajs.cn/list=%s'
-# db_attr = ('localhost', '3306', 'root', '123456')
+db_attr = ('localhost', '3306', 'root', '123456')
 
 
-db_attr = ('192.168.10.102', '3306', 'root', '123456')
+# db_attr = ('192.168.10.102', '3306', 'root', '123456')
 
 
 def get_connect():
@@ -27,7 +27,8 @@ def stock_sync(codes):
     am_start_time = '09:29:00'
     am_end_time = '11:31:00'
     pm_start_time = '12:59:00'
-    pm_end_time = '17:20:00'
+    pm_end_time = '15:01:00'
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
     while True:
         hour = datetime.datetime.now().strftime('%H:%M:%S')
         codes_arr = numpy.array_split(codes, 10)
@@ -40,8 +41,9 @@ def stock_sync(codes):
                     result_list = result.text.split(';')
                     i = 0
                     for code in arr:
-                        sql = sql + '("' + code + '", "' + '", "'.join(
-                            result_list[i].split('=')[1][1:-3].split(',')[0:33]) + '"),'
+                        ent_sp = result_list[i].split('=')[1][1:-3].split(',')[0:33]
+                        if ent_sp[-3] == today:
+                            sql = sql + '("' + code + '", "' + '", "'.join(ent_sp) + '"),'
                         i = i + 1
                     # print(sql[0:-1])
                     db_do_sql(sql[0:-1])
@@ -75,7 +77,7 @@ def db_do_sql(sql_script):
                 # msql = pymysql.connect(host=sql_url, port=sql_port, user=sql_user, password=sql_password,
                 #                        connect_timeout=_conn_timeout)
                 _conn_status = False  # 如果conn成功则_status为设置为False则退出循环，返回db连接对象
-            except Exception:
+            except Exception as e:
                 _conn_retries_count += 1
                 print(
                     '第%s次，连接数据库失败,数据库：%s' % (_conn_retries_count, db_attr))
@@ -97,18 +99,18 @@ def db_do_sql(sql_script):
         return False
 
 
-def run():
+def run(a_codes):
     print('数据采集', )
-    l_sql = 'select CONCAT(t.origin, t.`code`) from stock.stock t'
-    l_codes = db_do_sql(sql_script=l_sql)
+    # l_sql = 'select CONCAT(t.origin, t.`code`) from stock.stock t'
+    # l_codes = db_do_sql(sql_script=l_sql)
     # l_stock = Stock.objects.values('origin', 'code').all()
     # ['603511', '688510', '688315', '688068', '688316', '688097', '688005', '688050', '688613', '688630', '688056',
     #       '688026', '688317', '688559', '688551', '688408', '688233', '688665', '688468', '688388']
     # 多线程
 
-    a_codes = list()
-    for c in l_codes:
-        a_codes.append(c[0])
+    # a_codes = list()
+    # for c in l_codes:
+    #     a_codes.append(c[0])
     print('数据采集', a_codes)
     if len(a_codes) == 0:
         print('查询代码表为空，线程停止，采集失败')
