@@ -99,7 +99,6 @@ def lb_hsl_sync(request):
         t.start()
         msg = '采集器启动成功'
         status = 200
-
     except Exception as e:
         status = 500
         msg = '采集器%s失败' % action
