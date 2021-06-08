@@ -111,7 +111,7 @@ class LbHsl2(models.Model):
     date = models.DateField(verbose_name='日期')
     volume = models.CharField(max_length=128, verbose_name='成交量')
     turnoverrate = models.CharField(max_length=128, verbose_name='换手率')
-    date = models.TimeField(verbose_name='时间')
+    time = models.TimeField(verbose_name='时间')
 
     def __str__(self):
         return '[%s]' % self.code

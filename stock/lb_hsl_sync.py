@@ -23,7 +23,7 @@ def lb_hsl_run(l_codes):
         result = requests.get(url=url)
         l_result = result.text[12:-3].split('~')
         akdaily = l_result[38]
-        data = (l_result[2], l_result[30][0:8], int(l_result[6])*100, l_result[38], l_result[30][-6:])
+        data = (c, l_result[30][0:8], int(l_result[6])*100, l_result[38], l_result[30][-6:])
         sql = sql % str(data)
         print(sql)
         db_do_sql(sql_script=sql)
