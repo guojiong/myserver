@@ -86,12 +86,13 @@ def lb_hsl_sync(request):
     nowday = datetime.datetime.now().strftime('%Y-%m-%d')
     try:
         l_stocks = list()
-        lr_stocks = db_do_sql(  #
-            sql_script='''SELECT DISTINCT * FROM (SELECT t.code, (t.nprice-t.startprice)/t.startprice AS ns, 
-            (t.nprice-t.yprice)/t.yprice AS ny, t.time FROM stock.stockprice t WHERE date = '%s' 
-            AND time>='14:25' AND t.time <='14:40' ORDER BY t.time DESC
-            ) a WHERE a.ns >= 0.03 AND a.ns <= 0.05 
-            AND a.ny >= 0.03 AND a.ny <= 0.05''' % nowday)
+        lr_stocks = db_do_sql(
+            sql_script='''SELECT * FROM ( SELECTb.CODE, (b.nprice - IF(b.startprice>b.yprice,b.yprice,
+            b.startprice))/IF(b.startprice>b.yprice,b.yprice,b.startprice)>=0.03 AS l, 
+            (b.nprice - IF(b.startprice>b.yprice, b.yprice,b.startprice))/IF(b.startprice>b.yprice,
+            b.yprice,b.startprice)<=0.05 AS u, b.time  FROM (SELECT *  FROM (select ROW_NUMBER() over( partition by 
+            code order by time desc) r, t.* from stock.stockprice t WHERE t.date = '%s') a WHERE a.r = 1) b ) t2 
+            WHERE t2.l=1 AND t2.u=1''' % nowday)
         print(l_stocks)
         for s in lr_stocks:
             st = s[0]
