@@ -117,9 +117,6 @@ class LbHsl2(models.Model):
         return '[%s]' % self.code
 
     class Meta:
-        ordering = ['date']
         db_table = 'lbhsl2'
         verbose_name = '量比换手率'
         verbose_name_plural = '量比换手率'
-
-

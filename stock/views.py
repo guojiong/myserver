@@ -4,6 +4,7 @@ from time import sleep
 
 import requests
 from django.core import serializers
+from django.db.models import Max, Count
 from django.http import JsonResponse
 from django.shortcuts import render
 import threading
@@ -85,10 +86,10 @@ def lb_hsl_sync(request):
     nowday = datetime.datetime.now().strftime('%Y-%m-%d')
     try:
         l_stocks = list()
-        lr_stocks = db_do_sql(  # AND time>='14:25' AND t.time <='14:40' ORDER BY t.time DESC
+        lr_stocks = db_do_sql(  #
             sql_script='''SELECT DISTINCT * FROM (SELECT t.code, (t.nprice-t.startprice)/t.startprice AS ns, 
             (t.nprice-t.yprice)/t.yprice AS ny, t.time FROM stock.stockprice t WHERE date = '%s' 
-            
+            AND time>='14:25' AND t.time <='14:40' ORDER BY t.time DESC
             ) a WHERE a.ns >= 0.03 AND a.ns <= 0.05 
             AND a.ny >= 0.03 AND a.ny <= 0.05''' % nowday)
         print(l_stocks)
@@ -110,13 +111,18 @@ def lb_hsl_sync(request):
 def lb_hsl_result(request):
     # 涨幅大于3%，小于5%
     # 换手率，大于5%，小于10%
-    nowday = datetime.datetime.now().strftime('%Y-%m-%d')
-    result = LbHsl2.objects.filter(date=nowday, turnoverrate__range=[5, 10]).values('code',
-                                                                                   'turnoverrate').distinct()
+    day = request.GET.get('day')
+    if day:
+        nowday = day
+    else:
+        nowday = datetime.datetime.now().strftime('%Y-%m-%d')
+    result = LbHsl2.objects.values('code').filter(date=nowday, turnoverrate__range=[5, 10]) \
+        .annotate(t=Max('time'), d=Max('date'), r=Max('turnoverrate')).values('code', 't', 'd', 'r')
     l_stocks = list()
+    print(result)
     stock_list = list(result)
     for s in stock_list:
-        st = s['code'] + '-' + str(s['turnoverrate'])
+        st = s['code'] + '-' + str(s['r'])
         l_stocks.append(st)
     # 流通盘 大于50亿，小于100亿
     result_hsl_ltp = list()
@@ -127,6 +133,7 @@ def lb_hsl_result(request):
         r_json = result.text[12:-3].split('~')
         try:
             if int(r_json[-2]) > 5000000000:
+                print('2: ', r_json[-2])
                 result_hsl_ltp.append(ll[0] + '-' + r_json[-2])
         except:
             continue
