@@ -2,16 +2,13 @@ import datetime
 import json
 from time import sleep
 
-import requests
-from django.core import serializers
-from django.db.models import Max, Count, F
 from django.http import JsonResponse
 from django.shortcuts import render
 import threading
 from stock.dao.query import q_stock, q_collectorstatus
-from stock.lb_hsl_sync import lb_hsl_run
-from stock.models import Stock, CollectorStatus, LbHsl, LbHsl2
-from stock.stock_sync import run, stop_thread, db_do_sql
+from stock.scrapy.lb_hsl_sync import lb_hsl_run
+from stock.models import Stock, CollectorStatus
+from stock.scrapy.stock_sync import run, stop_thread, db_do_sql
 
 
 def index(request):

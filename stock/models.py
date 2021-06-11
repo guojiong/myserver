@@ -123,7 +123,7 @@ class LbHsl2(models.Model):
         verbose_name_plural = '量比换手率'
 
 
-class hq_history(models.Model):
+class Hq_history(models.Model):
     code = models.CharField(max_length=10, unique=True, verbose_name='股票代码')
     date = models.DateField(verbose_name='日期')
     sprice = models.FloatField(max_length=10, verbose_name='开盘价')
@@ -140,3 +140,4 @@ class hq_history(models.Model):
     v10 = models.IntegerField(verbose_name='10日均量')
     v20 = models.IntegerField(verbose_name='20日均量')
     hsl = models.FloatField(max_length=10, verbose_name='换手率')
+    lb = models.FloatField(max_length=10, verbose_name='量比')

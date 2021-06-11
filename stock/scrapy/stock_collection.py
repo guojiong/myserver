@@ -1,7 +1,7 @@
 from time import sleep
 from selenium import webdriver
 
-from stock.stock_sync import db_do_sql
+from stock.scrapy.stock_sync import db_do_sql
 
 flag = 'sh'
 if flag == 'sh':

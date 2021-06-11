@@ -13,10 +13,10 @@ dict_names = ('code', 'name', 'startprice', 'yprice', 'nprice', 'hprice', 'lpric
               'buy4', 'buy4price', 'buy5', 'buy5price', 'sale1', 'sale1price', 'sale2', 'sale2price', 'sale3',
               'sale3price', 'sale4', 'sale4price', 'sale5', 'sale5price', 'date', 'time', 'status')
 url = 'http://hq.sinajs.cn/list=%s'
-db_attr = ('localhost', '3306', 'root', '123456')
+# db_attr = ('localhost', '3306', 'root', '123456')
 
 
-# db_attr = ('192.168.10.102', '3306', 'root', '123456')
+db_attr = ('192.168.10.102', '3306', 'root', '123456')
 
 
 def get_connect():
