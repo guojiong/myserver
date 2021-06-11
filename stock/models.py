@@ -112,6 +112,7 @@ class LbHsl2(models.Model):
     volume = models.CharField(max_length=128, verbose_name='成交量')
     turnoverrate = models.CharField(max_length=128, verbose_name='换手率')
     time = models.TimeField(verbose_name='时间')
+    circulation = models.IntegerField(verbose_name='流通量')
 
     def __str__(self):
         return '[%s]' % self.code
@@ -120,3 +121,22 @@ class LbHsl2(models.Model):
         db_table = 'lbhsl2'
         verbose_name = '量比换手率'
         verbose_name_plural = '量比换手率'
+
+
+class hq_history(models.Model):
+    code = models.CharField(max_length=10, unique=True, verbose_name='股票代码')
+    date = models.DateField(verbose_name='日期')
+    sprice = models.FloatField(max_length=10, verbose_name='开盘价')
+    hprice = models.FloatField(max_length=10, verbose_name='最高价')
+    eprice = models.FloatField(max_length=10, verbose_name='收盘价')
+    lprice = models.FloatField(max_length=10, verbose_name='最低价')
+    volume = models.IntegerField(verbose_name='成交量')
+    changeamount = models.FloatField(max_length=20, verbose_name='涨跌额')
+    changerange = models.FloatField(max_length=10, verbose_name='涨跌幅')
+    p5 = models.FloatField(max_length=10, verbose_name='5日均价')
+    p10 = models.FloatField(max_length=10, verbose_name='10日均价')
+    p20 = models.FloatField(max_length=10, verbose_name='20日均价')
+    v5 = models.IntegerField(verbose_name='5日均量')
+    v10 = models.IntegerField(verbose_name='10日均量')
+    v20 = models.IntegerField(verbose_name='20日均量')
+    hsl = models.FloatField(max_length=10, verbose_name='换手率')

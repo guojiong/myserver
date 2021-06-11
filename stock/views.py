@@ -4,7 +4,7 @@ from time import sleep
 
 import requests
 from django.core import serializers
-from django.db.models import Max, Count
+from django.db.models import Max, Count, F
 from django.http import JsonResponse
 from django.shortcuts import render
 import threading
@@ -87,7 +87,7 @@ def lb_hsl_sync(request):
     try:
         l_stocks = list()
         lr_stocks = db_do_sql(
-            sql_script='''SELECT * FROM ( SELECTb.CODE, (b.nprice - IF(b.startprice>b.yprice,b.yprice,
+            sql_script='''SELECT t2.code FROM ( SELECT b.CODE, (b.nprice - IF(b.startprice>b.yprice,b.yprice,
             b.startprice))/IF(b.startprice>b.yprice,b.yprice,b.startprice)>=0.03 AS l, 
             (b.nprice - IF(b.startprice>b.yprice, b.yprice,b.startprice))/IF(b.startprice>b.yprice,
             b.yprice,b.startprice)<=0.05 AS u, b.time  FROM (SELECT *  FROM (select ROW_NUMBER() over( partition by 
@@ -117,27 +117,22 @@ def lb_hsl_result(request):
         nowday = day
     else:
         nowday = datetime.datetime.now().strftime('%Y-%m-%d')
-    result = LbHsl2.objects.values('code').filter(date=nowday, turnoverrate__range=[5, 10]) \
-        .annotate(t=Max('time'), d=Max('date'), r=Max('turnoverrate')).values('code', 't', 'd', 'r')
+    # result = LbHsl2.objects.values('code').filter(date=nowday, turnoverrate__range=[5, 10]) \
+    #     .annotate(t=Max('time'), d=Max('date'), r=Max('turnoverrate')).values('code', 't', 'd', 'r')
+    result = db_do_sql(
+        sql_script='''SELECT * FROM (SELECT ROW_NUMBER() over(PARTITION by t.code ORDER BY t.time DESC) r, t.* 
+        FROM stock.lbhsl2 t WHERE t.date = '%s') a WHERE a.r = 1 and a.turnoverrate>=5 and a.turnoverrate<=10''' % nowday)
     l_stocks = list()
     print(result)
     stock_list = list(result)
-    for s in stock_list:
-        st = s['code'] + '-' + str(s['r'])
-        l_stocks.append(st)
-    # 流通盘 大于50亿，小于100亿
     result_hsl_ltp = list()
-    for l in l_stocks:
-        ll = l.split('-')
-        url = 'http://qt.gtimg.cn/q=%s' % ll[0]
-        result = requests.get(url)
-        r_json = result.text[12:-3].split('~')
-        try:
-            if int(r_json[-2]) > 5000000000:
-                print('2: ', r_json[-2])
-                result_hsl_ltp.append(ll[0] + '-' + r_json[-2])
-        except:
-            continue
+    for s in stock_list:
+        # st = s['code'] + '-' + str(s['r'])
+        st = s[1] + '-' + str(s[4])
+        l_stocks.append(st)
+        # 流通盘 大于50亿，小于100亿
+        if s[6] and s[6] >= 5000000000 and s[6] <= 20000000000:
+            result_hsl_ltp.append(str(s[1]) + '-' + str(s[4]))
     return JsonResponse({'time': nowday, 'result_hsl_ltp_50_200': result_hsl_ltp, 'result_hsl_5_10': l_stocks})
 
 
